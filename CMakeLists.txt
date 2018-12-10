@@ -9,8 +9,10 @@ add_compile_options(-std=c++11)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  interactive_markers
   pcl_ros
   pcl_conversions
+  tf
 )
 
 ## System dependencies are found with CMake's conventions
@@ -105,7 +107,11 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES mockamap
-  CATKIN_DEPENDS roscpp pcl_ros pcl_conversions
+  CATKIN_DEPENDS
+        roscpp
+        pcl_ros pcl_conversions
+        interactive_markers
+        tf
 #  DEPENDS system_lib
 )
 
@@ -135,8 +141,9 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 file(GLOB ${PROJECT_NAME}_SRCS src/*.cpp)
 
-add_executable(${PROJECT_NAME}_node
-    ${${PROJECT_NAME}_SRCS})
+#add_executable(${PROJECT_NAME}_node
+#    ${${PROJECT_NAME}_SRCS})
+
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -149,9 +156,21 @@ add_executable(${PROJECT_NAME}_node
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
- target_link_libraries(${PROJECT_NAME}_node
-   ${catkin_LIBRARIES}
- )
+# target_link_libraries(${PROJECT_NAME}_node
+#   ${catkin_LIBRARIES}
+# )
+
+
+add_executable(mockamap_node src/mockamap.cpp src/maps.cpp
+        src/perlinnoise.cpp src/ces_randommap.cpp)
+target_link_libraries(mockamap_node
+        ${catkin_LIBRARIES}
+        )
+
+add_executable(simple_marker_node src/simple_marker.cpp)
+target_link_libraries(simple_marker_node
+        ${catkin_LIBRARIES}
+        )
 
 #############
 ## Install ##

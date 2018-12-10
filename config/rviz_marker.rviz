@@ -8,6 +8,7 @@ Panels:
         - /Status1
         - /PointCloud21
         - /InteractiveMarkers1
+        - /InteractiveMarkers1/Status1
       Splitter Ratio: 0.5
     Tree Height: 564
   - Class: rviz/Selection
@@ -88,16 +89,16 @@ Visualization Manager:
       Enable Transparency: true
       Enabled: true
       Name: InteractiveMarkers
-      Show Axes: false
+      Show Axes: true
       Show Descriptions: true
       Show Visual Aids: false
-      Update Topic: /basic_controls/update
+      Update Topic: /simple_marker/update
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: base_link
+    Fixed Frame: map
     Frame Rate: 30
   Name: root
   Tools:
@@ -125,25 +126,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 19.5525951
+      Distance: 11.2530251
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 1.44051003
-        Y: 1.96209002
-        Z: -3.66504002
+        X: 0.2419689
+        Y: 2.53540277
+        Z: -3.57637334
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.779799998
+      Pitch: 0.919799805
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.33226013
+      Yaw: 4.25725508
     Saved: ~
 Window Geometry:
   Displays:
