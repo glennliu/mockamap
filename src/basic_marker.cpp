@@ -44,6 +44,10 @@
 
 using namespace visualization_msgs;
 
+ros::Publisher marker_pub;
+visualization_msgs::InteractiveMarkerUpdate marker_msg;
+ros::Timer pub_timer;
+
 
 // %Tag(vars)%
 boost::shared_ptr<interactive_markers::InteractiveMarkerServer> server;
@@ -101,6 +105,24 @@ void frameCallback(const ros::TimerEvent&)
     counter++;
 }
 // %EndTag(frameCallback)%
+
+void advertiseFeedback(const visualization_msgs::InteractiveMarkerFeedbackConstPtr &feedback)
+{
+    int marker_id;
+
+
+
+    ROS_INFO("dragged id: %d",marker_id);
+    //marker_msg.markers[4].pose.position = feedback->pose.position;
+
+    //marker_msg.pose.position = feedback->pose.position;
+    //marker_array_msg.markers[];
+
+    server->applyChanges();
+
+
+
+}
 
 // %Tag(processFeedback)%
 void processFeedback( const visualization_msgs::InteractiveMarkerFeedbackConstPtr &feedback )
@@ -335,18 +357,23 @@ void makeViewFacingMarker( const tf::Vector3& position )
 
 void makeQuadrocopterMarkerArray(std::vector<tf::Vector3> &position_arr)
 {
-    ulong marker_count = position_arr.size();
-    //std::vector <InteractiveMarker> quad_marker;
-    InteractiveMarkerControl control;
+    //visualization_msgs::InteractiveMarkerUpdate marker_msg;
 
-    tf::Quaternion orien( 0.0, 1.0, 0.0, 1.0);
-    orien.normalize();
-    tf::quaternionTFToMsg(orien,control.orientation);
+    ulong marker_count = position_arr.size();
+
+
 
 
     for (ulong i=0;i<marker_count;i++){
+        Marker tmp_marker_;
         InteractiveMarker tmp_marker;
+        InteractiveMarkerControl control;
         std::stringstream name_,desc_;
+
+        tf::Quaternion orien( 0.0, 1.0, 0.0, 1.0);
+        orien.normalize();
+        tf::quaternionTFToMsg(orien,control.orientation);
+
         tmp_marker.header.frame_id = "map";
         tf::pointTFToMsg(position_arr[i],tmp_marker.pose.position);
         tmp_marker.scale = 1;
@@ -355,6 +382,9 @@ void makeQuadrocopterMarkerArray(std::vector<tf::Vector3> &position_arr)
         tmp_marker.name = name_.str();
         tmp_marker.description = desc_.str();
 
+        //tmp_marker_.id = i;
+        //control.markers.push_back(tmp_marker_);
+
         makeBoxControl(tmp_marker);
         control.interaction_mode = InteractiveMarkerControl::MOVE_ROTATE;
         tmp_marker.controls.push_back(control);
@@ -362,10 +392,13 @@ void makeQuadrocopterMarkerArray(std::vector<tf::Vector3> &position_arr)
         tmp_marker.controls.push_back(control);
 
         server->insert(tmp_marker);
-        server->setCallback(tmp_marker.name, &processFeedback);
+        //server->setCallback(tmp_marker.name, &processFeedback);
+        server->setCallback(tmp_marker.name, &advertiseFeedback);
 
+        // publisher init msg
+        marker_msg.markers.push_back(tmp_marker);
     }
-
+    pub_timer.start();
 }
 
 
@@ -557,6 +590,10 @@ void makeMovingMarker( const tf::Vector3& position )
     server->setCallback(int_marker.name, &processFeedback);
 }
 // %EndTag(Moving)%
+void pub_timer_cb(const ros::TimerEvent &ev)
+{
+    marker_pub.publish(marker_msg);
+}
 
 // %Tag(main)%
 int main(int argc, char** argv)
@@ -566,8 +603,12 @@ int main(int argc, char** argv)
 
     // create a timer to update the published transforms
     ros::Timer frame_timer = n.createTimer(ros::Duration(0.01), frameCallback);
+    pub_timer = n.createTimer(ros::Duration(1.0),pub_timer_cb);
+    pub_timer.stop();
 
-    server.reset( new interactive_markers::InteractiveMarkerServer("basic_controls","",false) );
+    marker_pub = n.advertise<visualization_msgs::InteractiveMarkerUpdate>("/quad_marker",1000);
+
+    server.reset( new interactive_markers::InteractiveMarkerServer("basic_controls","",true) );
 
     ros::Duration(0.1).sleep();
 
@@ -580,15 +621,15 @@ int main(int argc, char** argv)
     std::vector<tf::Vector3> position_array;
     tf::Vector3 position;
 
-    position = tf::Vector3( 6, 0, 3);
+    position = tf::Vector3( 6, 0, 3.2);
     position_array.push_back(position);
-    position = tf::Vector3( 3, 0, 3);
+    position = tf::Vector3( 2.5, 0.5, 3.5);
     position_array.push_back(position);
-    position = tf::Vector3( 0, 0, 3);
+    position = tf::Vector3( 0.8, 2.4, 3.4);
     position_array.push_back(position);
-    position = tf::Vector3( -3, 0, 3);
+    position = tf::Vector3( -2.8, 3.2, 3.2);
     position_array.push_back(position);
-    position = tf::Vector3( -6, 0, 3);
+    position = tf::Vector3( -6.2, 1.2, 3.2);
     position_array.push_back(position);
 
 
