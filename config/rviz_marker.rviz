@@ -92,7 +92,7 @@ Visualization Manager:
       Show Axes: true
       Show Descriptions: true
       Show Visual Aids: false
-      Update Topic: /simple_marker/update
+      Update Topic: /basic_controls/update
       Value: true
   Enabled: true
   Global Options:
@@ -126,16 +126,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 11.2530251
+      Distance: 19.8316746
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.2419689
-        Y: 2.53540277
-        Z: -3.57637334
+        X: 1.80085111
+        Y: 2.99292397
+        Z: -2.74131179
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false

@@ -172,6 +172,11 @@ target_link_libraries(simple_marker_node
         ${catkin_LIBRARIES}
         )
 
+add_executable(basic_marker_node src/basic_marker.cpp)
+target_link_libraries(basic_marker_node
+        ${catkin_LIBRARIES}
+        )
+
 #############
 ## Install ##
 #############

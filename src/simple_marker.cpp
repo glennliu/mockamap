@@ -5,6 +5,8 @@
 #include <ros/ros.h>
 
 #include <interactive_markers/interactive_marker_server.h>
+#include <interactive_markers/menu_handler.h>
+#include <tf/tf.h>
 
 void processFeedback(
         const visualization_msgs::InteractiveMarkerFeedbackConstPtr &feedback )
@@ -51,12 +53,22 @@ int main(int argc, char** argv)
     // this control does not contain any markers,
     // which will cause RViz to insert two arrows
     visualization_msgs::InteractiveMarkerControl rotate_control;
-    rotate_control.name = "move_x";
-    rotate_control.interaction_mode =
-            visualization_msgs::InteractiveMarkerControl::MOVE_AXIS;
+    visualization_msgs::InteractiveMarkerControl move_control;
 
-    // add the control to the interactive marker
+
+    tf::Quaternion orien(1.0, 0.0, 1.0, 0.0);
+    orien.normalize();
+    tf::quaternionTFToMsg(orien, rotate_control.orientation);
+    rotate_control.name = "rotate_z";
+    rotate_control.interaction_mode = visualization_msgs::InteractiveMarkerControl::ROTATE_AXIS;
     int_marker.controls.push_back(rotate_control);
+    move_control.name = "move_x";
+    move_control.interaction_mode = visualization_msgs::InteractiveMarkerControl::MOVE_3D;
+    int_marker.controls.push_back(move_control);
+
+
+    int_marker.pose.position.z = 3;
+
 
     // add the interactive marker to our collection &
     // tell the server to call processFeedback() when feedback arrives for it

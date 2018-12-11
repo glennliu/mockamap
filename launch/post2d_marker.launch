@@ -18,7 +18,7 @@
 
   </node>
 
-  <node pkg="mockamap" type="simple_marker_node" name="simple_marker_node" output="screen"/>
+  <node pkg="mockamap" type="basic_marker_node" name="basic_marker_node" output="screen"/>
 
   <!-- Launch RViz with the demo configuration -->
   <node name="rviz" pkg="rviz" type="rviz"
