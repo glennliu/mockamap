@@ -625,8 +625,6 @@ int main(int argc, char** argv)
     position_array.push_back(position);
     position = tf::Vector3( 2.5, 0.5, 3.5);
     position_array.push_back(position);
-    position = tf::Vector3( 0.8, 2.4, 3.4);
-    position_array.push_back(position);
     position = tf::Vector3( -2.8, 3.2, 3.2);
     position_array.push_back(position);
     position = tf::Vector3( -6.2, 1.2, 3.2);
